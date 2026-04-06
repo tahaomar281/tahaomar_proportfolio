@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taha Omar — MIS Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+:root {
+  --navy: #1a2744; --navy-light: #243358; --accent: #b8965a; --accent-light: #d4b07a;
+  --white: #ffffff; --off-white: #f8f6f2; --light-grey: #efefec; --mid-grey: #c8c5be;
+  --text: #2c2c2c; --text-muted: #777; --border: #e4e1db; --sidebar-w: 230px;
+}
+body { font-family: 'Source Sans 3', sans-serif; background: var(--off-white); color: var(--text); font-size: 16px; line-height: 1.7; }
+
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); background: var(--navy); position: fixed; top: 0; left: 0; bottom: 0; display: flex; flex-direction: column; z-index: 50; border-right: 1px solid rgba(255,255,255,0.06); }
+.sidebar-brand { padding: 2.5rem 1.6rem 1.75rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.sidebar-brand h1 { font-family: 'Lora', serif; font-size: 1.45rem; font-weight: 500; color: #fff; line-height: 1.2; letter-spacing: -0.01em; }
+.sidebar-brand p { font-size: 0.71rem; color: rgba(255,255,255,0.38); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.35rem; }
+.sidebar-nav { flex: 1; padding: 1.25rem 0; }
+.sidebar-nav a { display: flex; align-items: center; gap: 0.65rem; padding: 0.72rem 1.6rem; color: rgba(255,255,255,0.52); text-decoration: none; font-size: 0.88rem; font-weight: 400; letter-spacing: 0.02em; transition: all 0.16s; border-left: 2px solid transparent; cursor: pointer; }
+.sidebar-nav a:hover { color: #fff; background: rgba(255,255,255,0.04); }
+.sidebar-nav a:focus-visible, .mobile-menu a:focus-visible, .btn:focus-visible, .quick-link:focus-visible, .btn-publish:focus-visible, .back-btn:focus-visible, .btn-submit:focus-visible, .btn-cancel-m:focus-visible, .btn-confirm-pub:focus-visible, .modal-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sidebar-nav a.active { color: #fff; border-left-color: var(--accent); background: rgba(255,255,255,0.06); }
+.nav-icon { font-size: 0.88rem; opacity: 0.75; width: 16px; text-align: center; }
+.sidebar-social { padding: 1rem 1.6rem 2rem; border-top: 1px solid rgba(255,255,255,0.07); display: flex; gap: 0.55rem; }
+.sidebar-social a { width: 32px; height: 32px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.45); font-size: 0.75rem; font-weight: 600; text-decoration: none; transition: all 0.16s; }
+.sidebar-social a:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* MAIN */
+.main-content { margin-left: var(--sidebar-w); min-height: 100vh; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* HOME */
+.home-hero { background: var(--navy); padding: 4.5rem 3.5rem 4rem; display: flex; gap: 3rem; align-items: center; min-height: 380px; position: relative; overflow: hidden; }
+.home-hero::after { content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 45%; background: linear-gradient(to left, rgba(184,150,90,0.07), transparent); pointer-events: none; }
+.hero-photo { flex-shrink: 0; width: 155px; height: 195px; background: var(--navy-light); border: 2px solid rgba(184,150,90,0.3); border-radius: 3px; overflow: hidden; }
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: rgba(255,255,255,0.2); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.hero-photo-placeholder span { font-size: 2.75rem; opacity: 0.18; display: block; }
+.hero-text { z-index: 1; }
+.hero-eyebrow { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.85rem; font-weight: 500; }
+.hero-name { font-family: 'Lora', serif; font-size: clamp(2.2rem, 4vw, 3.1rem); color: #fff; font-weight: 500; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 0.9rem; }
+.hero-tagline { font-size: 1rem; color: rgba(255,255,255,0.58); max-width: 480px; font-weight: 300; line-height: 1.8; margin-bottom: 1.5rem; }
+.hero-badges { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+.hero-badge { font-size: 0.72rem; letter-spacing: 0.08em; padding: 4px 12px; border: 1px solid rgba(184,150,90,0.3); color: var(--accent); border-radius: 20px; }
+.hero-cta-row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.btn { display: inline-block; text-decoration: none; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; padding: 10px 22px; border-radius: 3px; cursor: pointer; transition: all 0.18s; border: none; font-family: 'Source Sans 3', sans-serif; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-light); }
+.btn-ghost { background: transparent; color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.22); }
+.btn-ghost:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+.home-sections { padding: 2.5rem 3.5rem; display: flex; flex-direction: column; gap: 2rem; }
+.home-card { background: var(--white); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
+.home-card-header { padding: 1.15rem 1.75rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.home-card-title { font-family: 'Lora', serif; font-size: 1rem; color: var(--navy); font-weight: 500; }
+.home-card-link { font-size: 0.78rem; color: var(--accent); text-decoration: none; letter-spacing: 0.05em; font-weight: 500; cursor: pointer; }
+.home-card-link:hover { text-decoration: underline; }
+.home-card-body { padding: 1.6rem 1.75rem; }
+.welcome-text p { color: #555; line-height: 1.85; font-size: 0.97rem; font-weight: 300; }
+.welcome-text p+p { margin-top: 0.75rem; }
+.quick-links { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.quick-link { display: flex; align-items: center; gap: 0.45rem; padding: 9px 18px; background: var(--off-white); border: 1px solid var(--border); border-radius: 4px; color: var(--text); text-decoration: none; font-size: 0.87rem; font-weight: 400; transition: all 0.16s; cursor: pointer; }
+.quick-link:hover { border-color: var(--accent); color: var(--navy); background: var(--white); }
+
+/* PAGE HEADER */
+.page-header { background: var(--white); border-bottom: 1px solid var(--border); padding: 2.5rem 3.5rem 1.75rem; }
+.breadcrumb { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
+.page-header h2 { font-family: 'Lora', serif; font-size: 2rem; font-weight: 500; color: var(--navy); letter-spacing: -0.02em; }
+.page-body { padding: 2.5rem 3.5rem; }
+
+/* ABOUT */
+.about-layout { display: grid; grid-template-columns: 200px 1fr; gap: 3rem; align-items: start; }
+.about-photo { width: 200px; height: 250px; background: var(--light-grey); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+.about-photo img { width: 100%; height: 100%; object-fit: cover; }
+.about-photo-placeholder { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: var(--mid-grey); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.about-photo-placeholder span { font-size: 3rem; }
+.about-content { display: flex; flex-direction: column; gap: 2.25rem; }
+.about-section h3 { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 500; color: var(--navy); margin-bottom: 0.8rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--border); }
+.about-section p { color: #555; line-height: 1.85; font-size: 0.97rem; font-weight: 300; margin-bottom: 0.7rem; }
+.about-section p:last-child { margin-bottom: 0; }
+
+/* EXPERIENCE */
+.exp-list { display: flex; flex-direction: column; gap: 1.25rem; }
+.exp-card { background: var(--white); border: 1px solid var(--border); border-radius: 5px; padding: 1.6rem 1.75rem; transition: border-color 0.18s; }
+.exp-card:hover { border-color: var(--accent); }
+.exp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+.exp-role { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 500; color: var(--navy); }
+.exp-date { font-size: 0.74rem; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; white-space: nowrap; }
+.exp-company { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.5; }
+.exp-card, .involve-item, .contact-form-wrap, .home-card, .blog-card, .contact-item { box-shadow: 0 1px 0 rgba(0,0,0,0.02); }
+.exp-company span { font-weight: 500; color: var(--text); }
+.exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+.exp-bullets li { font-size: 0.92rem; color: #555; font-weight: 300; line-height: 1.7; padding-left: 1.2rem; position: relative; }
+.exp-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--accent); opacity: 0.6; }
+.skills-section { margin-top: 2.5rem; }
+.skills-section h3 { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 500; color: var(--navy); margin-bottom: 1.25rem; padding-bottom: 0.45rem; border-bottom: 1px solid var(--border); }
+.skills-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.skill-tag { padding: 6px 16px; background: var(--white); border: 1px solid var(--border); border-radius: 20px; font-size: 0.84rem; color: var(--text); transition: all 0.16s; }
+.skill-tag:hover { border-color: var(--accent); color: var(--navy); }
+
+/* INVOLVEMENT */
+.involve-grid { display: flex; flex-direction: column; gap: 1.1rem; }
+.involve-item { background: var(--white); border: 1px solid var(--border); border-radius: 5px; padding: 1.5rem 1.75rem; display: flex; gap: 1.2rem; align-items: flex-start; transition: border-color 0.18s; }
+.involve-item:hover { border-color: var(--accent); }
+.involve-icon { width: 44px; height: 44px; flex-shrink: 0; background: var(--navy); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; }
+.involve-sub { font-size: 0.72rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.25rem; }
+.involve-title { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 500; color: var(--navy); margin-bottom: 0.25rem; }
+.involve-meta { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.55rem; }
+.involve-desc { color: #666; font-size: 0.9rem; font-weight: 300; line-height: 1.75; }
+
+/* BLOG */
+.blog-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+.blog-toolbar h3 { font-family: 'Lora', serif; font-size: 1.15rem; color: var(--navy); }
+.btn-publish { background: var(--navy); color: #fff; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 20px; border-radius: 3px; font-weight: 500; cursor: pointer; border: none; font-family: 'Source Sans 3', sans-serif; transition: background 0.18s; }
+.btn-publish:hover { background: var(--navy-light); }
+.blog-list { display: flex; flex-direction: column; gap: 1.4rem; }
+.blog-card { background: var(--white); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; cursor: pointer; transition: border-color 0.18s, box-shadow 0.18s; display: grid; grid-template-columns: 1fr auto; }
+.blog-card:hover { border-color: var(--accent); box-shadow: 0 2px 14px rgba(0,0,0,0.06); }
+.blog-card-info { padding: 1.5rem 1.75rem; }
+.blog-card-meta { display: flex; gap: 0.55rem; align-items: center; font-size: 0.73rem; color: var(--text-muted); margin-bottom: 0.55rem; }
+.cat-tag { background: rgba(184,150,90,0.12); color: var(--accent); padding: 2px 10px; border-radius: 20px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.68rem; }
+.blog-card-title { font-family: 'Lora', serif; font-size: 1.2rem; font-weight: 500; color: var(--navy); margin-bottom: 0.5rem; line-height: 1.3; }
+.blog-card-excerpt { color: #777; font-size: 0.9rem; font-weight: 300; line-height: 1.75; }
+.blog-card-arrow { padding: 1.5rem 1.4rem; display: flex; align-items: center; color: var(--mid-grey); font-size: 1.1rem; flex-shrink: 0; }
+.blog-empty { text-align: center; padding: 4rem 2rem; border: 1px dashed var(--border); border-radius: 5px; color: var(--text-muted); font-size: 0.93rem; font-style: italic; background: var(--white); }
+
+/* POST READER */
+.post-reader { display: none; }
+.post-reader.open { display: block; }
+.back-btn { background: none; border: 1px solid var(--border); border-radius: 3px; padding: 7px 16px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer; font-family: 'Source Sans 3', sans-serif; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.18s; margin-bottom: 1.5rem; }
+.back-btn:hover { border-color: var(--navy); color: var(--navy); }
+.post-article { background: var(--white); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
+.post-hero-img { width: 100%; max-height: 300px; object-fit: cover; display: block; }
+.post-hero-placeholder { height: 140px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-family: 'Lora', serif; font-size: 4rem; color: rgba(255,255,255,0.06); font-style: italic; }
+.post-hbody { padding: 2rem 2.5rem 0; }
+.post-meta-line { font-size: 0.74rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.65rem; }
+.post-article-title { font-family: 'Lora', serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 500; color: var(--navy); line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 0.85rem; }
+.post-byline { font-size: 0.82rem; color: var(--text-muted); padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.post-body { padding: 1.75rem 2.5rem 2.5rem; }
+.post-body p { color: #444; font-size: 1rem; line-height: 1.9; font-weight: 300; margin-bottom: 1.2rem; }
+.post-body h2 { font-family: 'Lora', serif; font-size: 1.35rem; font-weight: 500; color: var(--navy); margin: 2rem 0 0.7rem; }
+.post-body a { color: var(--accent); }
+.post-body a:hover { text-decoration: underline; }
+.post-img-caption { font-size: 0.72rem; color: var(--text-muted); font-style: italic; margin-top: -0.9rem; margin-bottom: 1.5rem; }
+.post-actions { display: flex; justify-content: flex-end; gap: 0.6rem; padding: 1rem 1.75rem; border-top: 1px solid var(--border); }
+.btn-del-post { background: none; border: 1px solid #e5a0a0; color: #c06060; font-size: 0.78rem; padding: 6px 16px; border-radius: 3px; cursor: pointer; font-family: 'Source Sans 3', sans-serif; transition: all 0.18s; letter-spacing: 0.06em; }
+.btn-del-post:hover { background: rgba(192,96,96,0.08); }
+
+/* CONTACT */
+.contact-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 3rem; align-items: start; }
+.contact-intro p { color: #555; line-height: 1.85; font-weight: 300; margin-bottom: 1.4rem; font-size: 0.97rem; }
+.contact-links { display: flex; flex-direction: column; gap: 0.65rem; }
+.contact-item { display: flex; align-items: center; gap: 1rem; padding: 0.95rem 1.2rem; background: var(--white); border: 1px solid var(--border); border-radius: 4px; text-decoration: none; color: var(--text); transition: all 0.18s; }
+.contact-item:hover { border-color: var(--accent); color: var(--navy); }
+.contact-item-icon { width: 36px; height: 36px; background: var(--navy); border-radius: 3px; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 0.88rem; flex-shrink: 0; }
+.contact-item-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.contact-item-value { font-size: 0.9rem; font-weight: 500; }
+.contact-form-wrap { background: var(--white); border: 1px solid var(--border); border-radius: 5px; padding: 1.75rem; }
+.contact-form-wrap h3 { font-family: 'Lora', serif; font-size: 1.1rem; color: var(--navy); margin-bottom: 1.25rem; }
+.form-group { margin-bottom: 1rem; }
+.form-label { display: block; font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 500; margin-bottom: 0.38rem; }
+.form-input, .form-textarea { width: 100%; border: 1px solid var(--border); border-radius: 3px; padding: 0.65rem 0.9rem; font-family: 'Source Sans 3', sans-serif; font-size: 0.92rem; color: var(--text); background: var(--off-white); outline: none; transition: border-color 0.18s; resize: vertical; }
+.form-input:focus, .form-textarea:focus { border-color: var(--accent); background: var(--white); }
+.form-textarea { min-height: 120px; }
+.btn-submit { background: var(--navy); color: #fff; border: none; padding: 10px 24px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; border-radius: 3px; cursor: pointer; font-family: 'Source Sans 3', sans-serif; transition: background 0.18s; }
+.btn-submit:hover { background: var(--navy-light); }
+.form-success { display: none; color: #4a7c59; background: rgba(74,124,89,0.1); border: 1px solid rgba(74,124,89,0.25); border-radius: 3px; padding: 0.75rem 1rem; font-size: 0.88rem; margin-top: 0.75rem; }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; z-index: 200; background: rgba(15,20,40,0.87); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; padding: 2rem; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: var(--white); width: 100%; max-width: 700px; border-radius: 6px; overflow: hidden; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 60px rgba(0,0,0,0.35); }
+.modal-header { background: var(--navy); padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1; }
+.modal-header-title { font-family: 'Lora', serif; font-size: 1.1rem; color: #fff; font-weight: 500; }
+.modal-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 1.3rem; cursor: pointer; transition: color 0.18s; line-height: 1; }
+.modal-close:hover { color: #fff; }
+.modal-body { padding: 1.75rem; display: flex; flex-direction: column; gap: 1.1rem; }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.modal-hint { font-size: 0.73rem; color: var(--text-muted); font-style: italic; margin-top: 0.2rem; }
+.modal-footer { padding: 1rem 1.75rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.65rem; }
+.btn-cancel-m { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 9px 20px; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 3px; cursor: pointer; font-family: 'Source Sans 3', sans-serif; transition: all 0.18s; }
+.btn-cancel-m:hover { border-color: var(--text-muted); }
+.btn-confirm-pub { background: var(--accent); color: #fff; border: none; padding: 9px 24px; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 3px; cursor: pointer; font-weight: 600; font-family: 'Source Sans 3', sans-serif; transition: background 0.18s; }
+.btn-confirm-pub:hover { background: var(--accent-light); }
+
+/* MOBILE */
+.mobile-bar { display: none; position: fixed; top: 0; left: 0; right: 0; z-index: 60; background: var(--navy); padding: 0 1.25rem; height: 52px; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.07); }
+.mobile-bar .brand { font-family: 'Lora', serif; color: #fff; font-size: 1.1rem; }
+.hamburger { background: none; border: none; color: rgba(255,255,255,0.7); cursor: pointer; font-size: 1.3rem; padding: 4px; }
+.mobile-menu { display: none; position: fixed; top: 52px; left: 0; right: 0; bottom: 0; z-index: 55; background: var(--navy); padding: 1.25rem; flex-direction: column; gap: 0.2rem; overflow-y: auto; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { padding: 0.8rem 1rem; color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.97rem; border-radius: 4px; cursor: pointer; }
+.mobile-menu a:hover, .mobile-menu a.active { background: rgba(255,255,255,0.07); color: #fff; }
+.site-footer { border-top: 1px solid var(--border); padding: 1.4rem 3.5rem; font-size: 0.78rem; color: var(--text-muted); background: var(--white); text-align: center; }
+
+@media (max-width: 800px) {
+  .sidebar { display: none; }
+  .main-content { margin-left: 0; padding-top: 52px; }
+  .mobile-bar { display: flex; }
+  .home-hero { flex-direction: column; padding: 2.5rem 1.5rem; text-align: center; align-items: center; }
+  .hero-cta-row, .hero-badges { justify-content: center; }
+  .home-sections, .page-body { padding: 1.75rem 1.25rem; }
+  .page-header { padding: 1.75rem 1.25rem 1.25rem; }
+  .about-layout, .contact-grid { grid-template-columns: 1fr; }
+  .about-photo { margin: 0 auto; }
+  .modal-row { grid-template-columns: 1fr; }
+  .site-footer { padding: 1.4rem 1.25rem; }
+  .exp-header { flex-direction: column; gap: 0.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- MOBILE BAR -->
+<div class="mobile-bar">
+  <span class="brand">Taha Omar</span>
+  <button type="button" class="hamburger" onclick="toggleMobile()" aria-label="Menu">☰</button>
+</div>
+<nav class="mobile-menu" id="mobileMenu">
+  <a onclick="nav('home')" data-page="home" class="active">⌂  Home</a>
+  <a onclick="nav('about')" data-page="about">◉  About Me</a>
+  <a onclick="nav('experience')" data-page="experience">◈  Experience</a>
+  <a onclick="nav('blog')" data-page="blog">✎  Blog</a>
+  <a onclick="nav('involvement')" data-page="involvement">◇  Involvement</a>
+  <a onclick="nav('contact')" data-page="contact">✉  Contact</a>
+</nav>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <h1>Taha Omar</h1>
+    <p>MIS · Penn State · 2026</p>
+  </div>
+  <nav class="sidebar-nav">
+    <a onclick="nav('home')" data-page="home" class="active"><span class="nav-icon">⌂</span>Home</a>
+    <a onclick="nav('about')" data-page="about"><span class="nav-icon">◉</span>About Me</a>
+    <a onclick="nav('experience')" data-page="experience"><span class="nav-icon">◈</span>Experience</a>
+    <a onclick="nav('blog')" data-page="blog"><span class="nav-icon">✎</span>Blog</a>
+    <a onclick="nav('involvement')" data-page="involvement"><span class="nav-icon">◇</span>Involvement</a>
+    <a onclick="nav('contact')" data-page="contact"><span class="nav-icon">✉</span>Contact</a>
+  </nav>
+  <div class="sidebar-social">
+    <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" title="LinkedIn">in</a>
+    <a href="mailto:tahaomar2963@gmail.com" title="Email">@</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+
+<!-- ═══ HOME ═══ -->
+<div class="page active" id="page-home">
+  <div class="home-hero">
+    <div class="hero-photo">
+      <div class="hero-photo-placeholder"><span>👤</span><p>Add Photo</p></div>
+    </div>
+    <div class="hero-text">
+      <p class="hero-eyebrow">Management Information Systems · Smeal College of Business · Penn State</p>
+      <h1 class="hero-name">Taha Omar.</h1>
+      <p class="hero-tagline">I'm a Management Information Systems student at the Pennsylvania State University with hands-on experience in consulting, data engineering, data analytics and client facing technology. Welcome to my professional portfolio.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">GPA 3.95</span>
+        <span class="hero-badge">Class of 2026</span>
+      </div>
+      <div class="hero-cta-row">
+        <button type="button" class="btn btn-primary" onclick="nav('about')">About Me</button>
+        <button type="button" class="btn btn-ghost" onclick="nav('experience')">My Experience</button>
+      </div>
+    </div>
+  </div>
+  <div class="home-sections">
+    <div class="home-card">
+      <div class="home-card-header">
+        <span class="home-card-title">Welcome</span>
+        <span class="home-card-link" onclick="nav('about')">Learn more →</span>
+      </div>
+      <div class="home-card-body">
+        <div class="welcome-text">
+          <p>Welcome to my professional portfolio. I'm a Management Information Systems student at Penn State's Smeal College of Business, graduating in May 2026 with a 3.93 GPA. My background spans data engineering and analytics, client facing technology and consulting. I will be working as a Technology Consultant for PwC in New York once I graduate. I enjoy playing soccer and going to the gym. I also like cars and motorbikes.</p>
+          <p>Feel free to explore my experience, read my blog where I write about trends shaping business and technology, as well as personal interests.</p>
+        </div>
+      </div>
+    </div>
+    <div class="home-card">
+      <div class="home-card-header"><span class="home-card-title">Explore</span></div>
+      <div class="home-card-body">
+        <div class="quick-links">
+          <button type="button" class="quick-link" onclick="nav('about')">👤 About Me</button>
+          <button type="button" class="quick-link" onclick="nav('experience')">💼 Experience</button>
+          <button type="button" class="quick-link" onclick="nav('blog')">✍ Blog</button>
+          <button type="button" class="quick-link" onclick="nav('involvement')">🤝 Involvement</button>
+          <button type="button" class="quick-link" onclick="nav('contact')">✉ Contact</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">© 2026 Taha Omar · Penn State University · Smeal College of Business</footer>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div class="page" id="page-about">
+  <div class="page-header">
+    <div class="breadcrumb">Home / About Me</div>
+    <h2>About Me</h2>
+  </div>
+  <div class="page-body">
+    <div class="about-layout">
+      <div>
+        <div class="about-photo">
+          <div class="about-photo-placeholder"><span>👤</span><p>Headshot</p></div>
+        </div>
+      </div>
+      <div class="about-content">
+        <div class="about-section">
+          <h3>Professional</h3>
+          <p>I'm a Management Information Systems student at the Smeal College of Business at Penn State University, graduating in May 2026 with a 3.95 GPA. My coursework has largely revolved around business strategy, data analytics, and systems design, adequately preparing me to optimize and leverage technology for businesses.</p>
+          <p>My experience spans interning at VentureDive in Karachi, where I built end-to-end data pipelines and learnt as much as I could about data engineering amongst experienced professionals, to client-facing technology work at ValueLink, where I currently serve as the primary point of contact for enterprise clients adopting complex appraisal management software. Earlier roles in product evaluation and IT coordination have given me a well-rounded view of how products are built and delivered.</p>
+          <p>I feel ready and excited to start this new chapter in my professional career as a Technology Consultant in New York next fall.</p>
+        </div>
+        <div class="about-section">
+          <h3>Personal</h3>
+          <p>Outside of work and academics, I've been a fan of soccer and have supported FC Barcelona for as long as I can remember. I also took up weightlifting a little over two years ago and it has since become a passion of mine. Beyond that, I have a strong interest in cars and motorbikes and enjoy keeping up with the latest in both. More recently, I have also developed a habit of staying informed on current events, especially in areas like business, technology, and geopolitics, because I enjoy understanding what is happening in the world and how different industries and global trends connect.</p>
+          <p>I was raised in Pakistan before moving to the United States for university, and experiencing life in both countries has given me insight into two very different cultures and lifestyles. I’m incredibly grateful for that experience, as it has allowed me to develop a broader, more diverse perspective with which to approach any given situation. In addition, I’ve been fortunate to travel to many places in Europe and Asia, which has only deepened my appreciation for different people, cultures, and ways of thinking. </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">© 2026 Taha Omar · Penn State University</footer>
+</div>
+
+<!-- ═══ EXPERIENCE ═══ -->
+<div class="page" id="page-experience">
+  <div class="page-header">
+    <div class="breadcrumb">Home / Experience</div>
+    <h2>Experience</h2>
+  </div>
+  <div class="page-body">
+    <div class="exp-list">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-role">Client Relationship Specialist</div>
+          <div class="exp-date">Aug 2025 – Present</div>
+        </div>
+        <div class="exp-company"><span>ValueLink</span> · Remote · Houston, Texas</div>
+        <ul class="exp-bullets">
+          <li>Built deep expertise in ValueLink's Appraisal Management Software to support client adoption of a complex enterprise technology platform.</li>
+          <li>Serve as primary point of contact for assigned clients, leading relationship building, needs assessment, issue resolution, and product onboarding.</li>
+          <li>Developed detailed documentation for client integrations with external partners and supported account setup and configuration.</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-role">Data Engineering Intern</div>
+          <div class="exp-date">Jul 2025 – Aug 2025</div>
+        </div>
+        <div class="exp-company"><span>VentureDive</span> · Karachi, Pakistan</div>
+        <ul class="exp-bullets">
+          <li>Built an end-to-end data pipeline enabling analysis of 200K+ transaction records, generating insights that reduced reporting time by 30%.</li>
+          <li>Researched and evaluated emerging data tools, producing internal documentation and implementation guides that improved onboarding efficiency by 20%.</li>
+          <li>Collaborated on a cross-functional resume-parsing project, redesigning the workflow to reduce manual review workload by 25%.</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-role">Product Intern</div>
+          <div class="exp-date">Jan 2023 – Mar 2023</div>
+        </div>
+        <div class="exp-company"><span>Spursol</span> · Karachi, Pakistan</div>
+        <ul class="exp-bullets">
+          <li>Evaluated and tested SaaS products with 100+ hours logged to identify usability issues, process gaps, and improvement opportunities.</li>
+          <li>Collaborated with developers to resolve errors, supporting data analysis and more efficient workflows.</li>
+          <li>Documented findings and recommendations in structured reports to guide product strategy and development priorities.</li>
+        </ul>
+      </div>
+      <div class="exp-card">
+        <div class="exp-header">
+          <div class="exp-role">Operations &amp; IT Coordinator</div>
+          <div class="exp-date">Oct 2022 – Feb 2023</div>
+        </div>
+        <div class="exp-company"><span>Replenish</span> · Karachi, Pakistan</div>
+        <ul class="exp-bullets">
+          <li>Used SQL and Excel to manage internal data systems, generate reports, and support logistics tracking.</li>
+          <li>Spearheaded sustainability initiatives and process improvements through cross-functional collaboration.</li>
+          <li>Optimized workflows by identifying inefficiencies and implementing data-driven improvements across operations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="skills-section">
+      <h3>Technical Skills</h3>
+      <div class="skills-grid">
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">Tableau</span>
+        <span class="skill-tag">Excel</span>
+        <span class="skill-tag">Microsoft Access</span>
+        <span class="skill-tag">PowerPoint</span>
+        <span class="skill-tag">Data Analytics</span>
+        <span class="skill-tag">Data Pipeline Design</span>
+        <span class="skill-tag">Prompt Engineering</span>
+        <span class="skill-tag">Systems Analysis</span>
+        <span class="skill-tag">Client Relations</span>
+        <span class="skill-tag">Technical Documentation</span>
+        <span class="skill-tag">Business Strategy</span>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">© 2026 Taha Omar · Penn State University</footer>
+</div>
+
+<!-- ═══ BLOG ═══ -->
+<div class="page" id="page-blog">
+  <div class="page-header">
+    <div class="breadcrumb">Home / Blog</div>
+    <h2>Blog</h2>
+  </div>
+  <div class="page-body">
+    <div id="blogListView">
+      <div class="blog-toolbar">
+        <h3>Articles &amp; Posts</h3>
+        <button type="button" class="btn-publish" onclick="openModal()">+ Publish New Post</button>
+      </div>
+      <div class="blog-list" id="blogList"></div>
+    </div>
+    <div class="post-reader" id="postReader">
+      <button type="button" class="back-btn" onclick="closePR()">← Back to Blog</button>
+      <div class="post-article" id="postArticle"></div>
+    </div>
+  </div>
+  <footer class="site-footer">© 2026 Taha Omar · Penn State University</footer>
+</div>
+
+<!-- ═══ INVOLVEMENT ═══ -->
+<div class="page" id="page-involvement">
+  <div class="page-header">
+    <div class="breadcrumb">Home / Involvement</div>
+    <h2>Involvement</h2>
+  </div>
+  <div class="page-body">
+    <div class="involve-grid">
+      <div class="involve-item">
+        <div class="involve-icon">🎓</div>
+        <div>
+          <div class="involve-sub">Education</div>
+          <div class="involve-title">Penn State University — Smeal College of Business</div>
+          <div class="involve-meta">University Park, PA · Class of 2026</div>
+          <div class="involve-desc">B.S. in Management Information Systems. Dean's List all five semesters. GPA 3.95. Coursework covers data analytics, business strategy, international economics, NLP, and systems design.</div>
+        </div>
+      </div>
+      <div class="involve-item">
+        <div class="involve-icon">🎪</div>
+        <div>
+          <div class="involve-sub">Leadership · Event Management</div>
+          <div class="involve-title">Nixor Event Management Services (NEMS)</div>
+          <div class="involve-meta">Karachi, Pakistan · Aug 2021 – Oct 2022</div>
+          <div class="involve-desc">Served as Senior Volunteer, leading teams to execute high-impact events. Focused on coordination, communication, and post-event data collection and reporting. Managed and mentored Junior Volunteers throughout the program.</div>
+        </div>
+      </div>
+      <div class="involve-item">
+        <div class="involve-icon">🏥</div>
+        <div>
+          <div class="involve-sub">Community Service · Healthcare</div>
+          <div class="involve-title">Indus Charity Hospital</div>
+          <div class="involve-meta">Karachi, Pakistan · Jun 2019 – Jul 2019</div>
+          <div class="involve-desc">Logged 30+ hours as a Senior Volunteer facilitating communication between patients and hospital staff. Worked with clinical teams to ensure high-quality, compassionate care for under-served patients.</div>
+        </div>
+      </div>
+      <div class="involve-item">
+        <div class="involve-icon">🏆</div>
+        <div>
+          <div class="involve-sub">Awards &amp; Recognition</div>
+          <div class="involve-title">Academic Honors</div>
+          <div class="involve-meta">Penn State &amp; A-Levels</div>
+          <div class="involve-desc">Dean's List for all five semesters at Penn State. Honor Roll for three of four semesters in A-Levels. Olympiad medals in competitive academic settings. Consistent academic performance across institutions.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">© 2026 Taha Omar · Penn State University</footer>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div class="page" id="page-contact">
+  <div class="page-header">
+    <div class="breadcrumb">Home / Contact</div>
+    <h2>Contact</h2>
+  </div>
+  <div class="page-body">
+    <div class="contact-grid">
+      <div>
+        <div class="contact-intro">
+          <p>I'm always open to connecting, whether you're a recruiter, a fellow student, or someone who found something useful in my blog. The best way to reach me is email or LinkedIn.</p>
+        </div>
+        <div class="contact-links">
+          <a class="contact-item" href="mailto:tahaomar2963@gmail.com">
+            <div class="contact-item-icon">✉</div>
+            <div><div class="contact-item-label">Email</div><div class="contact-item-value">tahaomar2963@gmail.com</div></div>
+          </a>
+          <a class="contact-item" href="tel:9403432357">
+            <div class="contact-item-icon">📞</div>
+            <div><div class="contact-item-label">Phone</div><div class="contact-item-value">(940) 343-2357</div></div>
+          </a>
+          <a class="contact-item" href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">
+            <div class="contact-item-icon" style="font-size:0.75rem;font-weight:700;">in</div>
+            <div><div class="contact-item-label">LinkedIn</div><div class="contact-item-value">https://www.linkedin.com/in/taha-omar-30980b335/ →</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form-wrap">
+        <h3>Send a Message</h3>
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" id="cName" placeholder="Jane Smith">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="cEmail" placeholder="jane@example.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" id="cMsg" placeholder="What would you like to discuss?"></textarea>
+        </div>
+        <button type="button" class="btn-submit" onclick="submitContact()">Send Message</button>
+        <div class="form-success" id="contactSuccess">✓ Thanks! I'll get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+  <footer class="site-footer">© 2026 Taha Omar · Penn State University</footer>
+</div>
+
+</div><!-- /main-content -->
+
+<!-- PUBLISH MODAL -->
+<div class="modal-overlay" id="publishModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-header-title">Publish New Post</span>
+      <button type="button" class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-row">
+        <div>
+          <label class="form-label">Title *</label>
+          <input class="form-input" id="pTitle" placeholder="An engaging, specific title">
+        </div>
+        <div>
+          <label class="form-label">Category</label>
+          <input class="form-input" id="pCat" placeholder="e.g. Technology, Business, Data">
+        </div>
+      </div>
+      <div>
+        <label class="form-label">Excerpt (1–2 sentences shown on the blog list)</label>
+        <input class="form-input" id="pExcerpt" placeholder="A short, compelling preview of your article">
+      </div>
+      <div>
+        <label class="form-label">Article Body * (200–400 words)</label>
+        <textarea class="form-textarea" id="pBody" style="min-height:240px" placeholder="Write your article here. Separate paragraphs with a blank line.
+
+Start a heading line with ## like:
+## Why This Matters
+
+Keep paragraphs to 25–35 words for readability. Conversational but professional tone."></textarea>
+        <p class="modal-hint">Tip: Paragraphs = blank line between them. Headings = start line with ## (e.g. ## The Big Shift)</p>
+      </div>
+      <div class="modal-row">
+        <div>
+          <label class="form-label">Featured Image URL (optional)</label>
+          <input class="form-input" id="pImg" placeholder="https://...">
+        </div>
+        <div>
+          <label class="form-label">Image Source / Caption (optional)</label>
+          <input class="form-input" id="pImgCredit" placeholder="Photo via Unsplash / Reuters">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn-cancel-m" onclick="closeModal()">Cancel</button>
+      <button type="button" class="btn-confirm-pub" onclick="publishPost()">Publish Post</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY = 'taha_portfolio_posts_v1';
+
+function loadPosts() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+  catch(e) { return []; }
+}
+function savePosts(p) { localStorage.setItem(STORAGE_KEY, JSON.stringify(p)); }
+
+// NAV
+function nav(page) {
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('[data-page]').forEach(el => el.classList.remove('active'));
+  const targetPage = document.getElementById('page-' + page);
+  if (!targetPage) return;
+  targetPage.classList.add('active');
+  document.querySelectorAll('[data-page="' + page + '"]').forEach(el => el.classList.add('active'));
+  if (page === 'blog') { closePR(); renderBlog(); }
+  window.scrollTo(0, 0);
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+function toggleMobile() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+// BLOG
+function renderBlog() {
+  const posts = loadPosts();
+  const list = document.getElementById('blogList');
+  if (!posts.length) {
+    list.innerHTML = '<div class="blog-empty">No posts yet — click <strong>Publish New Post</strong> to write your first article.</div>';
+    return;
+  }
+  list.innerHTML = posts.slice().reverse().map((p, ri) => {
+    const i = posts.length - 1 - ri;
+    return `<div class="blog-card" onclick="openPost(${i})">
+      <div class="blog-card-info">
+        <div class="blog-card-meta">
+          <span class="cat-tag">${esc(p.category||'Article')}</span>
+          <span>${esc(p.date)}</span><span>·</span>
+          <span>${readTime(p.body)} min read</span>
+        </div>
+        <div class="blog-card-title">${esc(p.title)}</div>
+        <div class="blog-card-excerpt">${esc(p.excerpt || p.body.substring(0,150)+'…')}</div>
+      </div>
+      <div class="blog-card-arrow">›</div>
+    </div>`;
+  }).join('');
+}
+
+function readTime(t) { return Math.max(1, Math.round(t.split(' ').length / 200)); }
+
+function openPost(idx) {
+  const posts = loadPosts();
+  const p = posts[idx];
+  if (!p) return;
+  document.getElementById('blogListView').style.display = 'none';
+  const reader = document.getElementById('postReader');
+  reader.classList.add('open');
+  const imgHTML = p.imgUrl
+    ? `<img class="post-hero-img" src="${esc(p.imgUrl)}" alt="">`
+    : `<div class="post-hero-placeholder">✎</div>`;
+  const credit = p.imgCredit ? `<p class="post-img-caption">${esc(p.imgCredit)}</p>` : '';
+  document.getElementById('postArticle').innerHTML = `
+    ${imgHTML}
+    <div class="post-hbody">
+      <div class="post-meta-line">${esc(p.category||'Article')} · ${esc(p.date)}</div>
+      <h1 class="post-article-title">${esc(p.title)}</h1>
+      <div class="post-byline">By Taha Omar · ${readTime(p.body)} min read</div>
+    </div>
+    <div class="post-body">${credit}${parseBody(p.body)}</div>
+    <div class="post-actions">
+      <button class="btn-del-post" onclick="deletePost(${idx})">Delete Post</button>
+    </div>`;
+}
+
+function parseBody(text) {
+  return text.split(/\n\n+/).map(block => {
+    block = block.trim(); if (!block) return '';
+    if (block.startsWith('## ')) return `<h2>${esc(block.slice(3))}</h2>`;
+    return `<p>${esc(block).replace(/\n/g,'<br>')}</p>`;
+  }).join('');
+}
+
+function closePR() {
+  document.getElementById('blogListView').style.display = '';
+  document.getElementById('postReader').classList.remove('open');
+  renderBlog();
+}
+
+function deletePost(idx) {
+  if (!confirm('Delete this post? This cannot be undone.')) return;
+  const posts = loadPosts();
+  posts.splice(idx, 1);
+  savePosts(posts);
+  closePR();
+}
+
+// MODAL
+function openModal() { document.getElementById('publishModal').classList.add('open'); }
+function closeModal() {
+  document.getElementById('publishModal').classList.remove('open');
+  ['pTitle','pCat','pExcerpt','pBody','pImg','pImgCredit'].forEach(id => { document.getElementById(id).value=''; });
+}
+function publishPost() {
+  const title = document.getElementById('pTitle').value.trim();
+  const body = document.getElementById('pBody').value.trim();
+  if (!title || !body) { alert('Title and body are required.'); return; }
+  const now = new Date();
+  const posts = loadPosts();
+  posts.push({
+    title, body,
+    category: document.getElementById('pCat').value.trim() || 'Article',
+    excerpt: document.getElementById('pExcerpt').value.trim(),
+    imgUrl: document.getElementById('pImg').value.trim(),
+    imgCredit: document.getElementById('pImgCredit').value.trim(),
+    date: now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),
+    ts: now.getTime()
+  });
+  savePosts(posts);
+  closeModal();
+  renderBlog();
+}
+
+// CONTACT
+function submitContact() {
+  if (!document.getElementById('cName').value.trim() || !document.getElementById('cEmail').value.trim() || !document.getElementById('cMsg').value.trim()) {
+    alert('Please fill in all fields.'); return;
+  }
+  document.getElementById('contactSuccess').style.display = 'block';
+  ['cName','cEmail','cMsg'].forEach(id => { document.getElementById(id).value=''; });
+  setTimeout(() => { document.getElementById('contactSuccess').style.display='none'; }, 5000);
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+renderBlog();
+</script>
+</body>
+</html>
